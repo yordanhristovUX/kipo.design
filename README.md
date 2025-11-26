@@ -1,12 +1,13 @@
 # kipo.design
 
-Modern web application built with React, TypeScript, and Vite.
+Modern portfolio website built with React, TypeScript, Vite, and a brutalist design system.
 
 ## 📋 Table of Contents
 
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Development](#development)
+- [Design System](#design-system)
 - [Build & Deployment](#build--deployment)
 - [Git Workflow](#git-workflow)
 - [Documentation](#documentation)
@@ -84,7 +85,54 @@ npm run preview
 npm run lint
 
 # TypeScript type checking
-npm run type-check  # (add to package.json if missing)
+npx tsc --noEmit
+```
+
+---
+
+## 🎨 Design System
+
+This project uses a **brutalist design system** inspired by Momentic.ai with the following principles:
+
+### Key Features
+- **Geometric layouts** with strict grid-based design
+- **Bold typography** - all headings use `font-bold`
+- **Zinc neutral palette** with blue accent (#3b82f6)
+- **2px borders** throughout (no thin borders)
+- **Minimal rounding**: 2px for large sections, 4px for small elements
+- **No shadows or gradients** - pure brutalist aesthetic
+
+### Design System Components
+- Button (4 variants, 4 sizes)
+- Card (with Header, Content, Footer)
+- Input (brutalist styling)
+- Badge (3 variants)
+- Avatar (with borders)
+- Typography (Heading, Text)
+- Layout (Container, Section)
+
+### Documentation
+- **[DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)** - Complete design system guide
+- **[FIXES_SUMMARY.md](FIXES_SUMMARY.md)** - Recent fixes and patterns
+- **Design System Showcase** - Available at `/design-system` route
+
+### Quick Example
+```tsx
+import { Button, Card, CardContent } from '@/design-system';
+
+<Card>
+  <CardContent className="p-8">
+    <h3 className="text-xl font-bold text-zinc-900 mb-4">
+      Card Title
+    </h3>
+    <p className="text-zinc-600 mb-6">
+      Card content goes here
+    </p>
+    <Button variant="primary" size="lg">
+      Click Me
+    </Button>
+  </CardContent>
+</Card>
 ```
 
 ---
@@ -148,11 +196,17 @@ git merge dev
 
 ## 📚 Documentation
 
-The project contains detailed documentation in the `docs/` directory:
+The project contains detailed documentation:
 
+### Git & Workflow
 - **[WORKFLOW.md](docs/WORKFLOW.md)** - Git workflow and processes
 - **[GIT-GUIDE.md](docs/GIT-GUIDE.md)** - Quick Git reference
 - **[DEVELOPMENT-STANDARDS.md](docs/DEVELOPMENT-STANDARDS.md)** - Development standards
+
+### Design System
+- **[DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)** - Complete design system documentation
+- **[FIXES_SUMMARY.md](FIXES_SUMMARY.md)** - Recent fixes and usage patterns
+- **Design System Showcase** - Interactive component library at `/design-system`
 
 ---
 
@@ -166,19 +220,23 @@ kipo.design/
 │   └── DEVELOPMENT-STANDARDS.md
 ├── src/
 │   ├── components/           # React components
-│   │   ├── common/          # Common components
-│   │   ├── layout/          # Layout components
-│   │   └── features/        # Feature-specific components
+│   │   ├── sections/        # Page sections (Hero, etc.)
+│   │   ├── atoms/           # Editable atomic components
+│   │   ├── cms/             # CMS editing components
+│   │   └── admin/           # Admin panel components
+│   ├── design-system/       # Brutalist design system
+│   │   ├── components/      # Design system components
+│   │   │   ├── primitives/  # Button, Card, Input, etc.
+│   │   │   └── layout/      # Container, Section
+│   │   ├── tokens/          # Design tokens
+│   │   └── utils/           # Design system utilities
 │   ├── contexts/            # React Context providers
-│   ├── hooks/               # Custom hooks
-│   ├── services/            # API services
-│   ├── utils/               # Helper functions
-│   ├── types/               # TypeScript types
-│   ├── constants/           # Constants
 │   ├── App.tsx              # Main App component
 │   ├── main.tsx             # Entry point
-│   └── index.css            # Global styles
+│   └── index.css            # Global styles + brutalist utilities
 ├── public/                   # Static assets
+├── DESIGN_SYSTEM.md         # Design system documentation
+├── FIXES_SUMMARY.md         # Recent fixes documentation
 ├── .env.example             # Environment variables template
 ├── .gitignore               # Git ignore rules
 ├── package.json             # Dependencies and scripts
@@ -194,9 +252,11 @@ kipo.design/
 - **React 18** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
-- **React Router** - Routing
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
+- **React Router** - Client-side routing
+- **Tailwind CSS** - Utility-first styling
+- **CVA (Class Variance Authority)** - Component variants
+- **Lucide React** - Icon library
+- **Custom Design System** - Brutalist component library
 
 ---
 
@@ -262,4 +322,4 @@ If you encounter a problem:
 
 ---
 
-**Last Updated:** 2024-11-24
+**Last Updated:** 2024-11-26

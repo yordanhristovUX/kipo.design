@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/design-system';
 import { useCMS } from '../contexts/CMSContext';
@@ -30,6 +31,7 @@ const Header: React.FC = () => {
     { name: 'Process', href: '#process' },
     { name: 'Studio', href: '#studio' },
     { name: 'Contact', href: '#contact' },
+    { name: 'Design System', href: '/design-system', isRoute: true },
   ];
 
   // Adjust top position when in edit mode
@@ -53,13 +55,23 @@ const Header: React.FC = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold text-zinc-900 hover:text-primary transition-colors duration-150 uppercase tracking-wide"
-              >
-                {item.name}
-              </a>
+              item.isRoute ? (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-sm font-semibold text-zinc-900 hover:text-primary transition-colors duration-150 uppercase tracking-wide"
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-semibold text-zinc-900 hover:text-primary transition-colors duration-150 uppercase tracking-wide"
+                >
+                  {item.name}
+                </a>
+              )
             ))}
           </nav>
 
@@ -92,14 +104,25 @@ const Header: React.FC = () => {
         <div className="md:hidden bg-white border-t-2 border-zinc-900">
           <div className="brutalist-container py-4 space-y-2">
             {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="block px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 transition-colors duration-150 uppercase tracking-wide border-2 border-zinc-200 rounded-brutalist"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </a>
+              item.isRoute ? (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="block px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 transition-colors duration-150 uppercase tracking-wide border-2 border-zinc-200 rounded-brutalist"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="block px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 transition-colors duration-150 uppercase tracking-wide border-2 border-zinc-200 rounded-brutalist"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </a>
+              )
             ))}
             <div className="pt-2">
               <Button

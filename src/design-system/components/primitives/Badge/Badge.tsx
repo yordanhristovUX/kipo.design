@@ -21,23 +21,24 @@ import { cn } from '@/design-system/utils/cn';
  * Badge variant styles using CVA
  */
 const badgeVariants = cva(
-  // Base styles
-  'inline-flex items-center justify-center font-medium transition-colors',
+  // Base styles - brutalist design
+  'inline-flex items-center justify-center font-bold transition-colors border-2 uppercase tracking-wide',
   {
     variants: {
       variant: {
-        default: 'bg-gray-700 text-gray-100',
-        primary: 'bg-primary-600 text-white',
-        success: 'bg-success text-white',
-        error: 'bg-error text-white',
-        warning: 'bg-warning text-white',
-        info: 'bg-info text-white',
-        outline: 'border-2 border-gray-600 text-gray-200 bg-transparent',
+        default: 'bg-zinc-100 text-zinc-900 border-zinc-900',
+        primary: 'bg-primary text-white border-primary',
+        secondary: 'bg-white text-zinc-900 border-zinc-900',
+        success: 'bg-green-500 text-white border-green-600',
+        error: 'bg-red-500 text-white border-red-600',
+        warning: 'bg-yellow-500 text-zinc-900 border-yellow-600',
+        info: 'bg-blue-500 text-white border-blue-600',
+        outline: 'border-zinc-900 text-zinc-900 bg-transparent',
       },
       size: {
-        sm: 'px-2 py-0.5 text-xs rounded-md',
-        md: 'px-2.5 py-1 text-sm rounded-lg',
-        lg: 'px-3 py-1.5 text-base rounded-lg',
+        sm: 'px-2 py-0.5 text-xs rounded-brutalist',
+        md: 'px-2.5 py-1 text-sm rounded-brutalist',
+        lg: 'px-3 py-1.5 text-base rounded-brutalist',
       },
     },
     defaultVariants: {

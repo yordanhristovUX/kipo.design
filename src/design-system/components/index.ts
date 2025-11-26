@@ -7,3 +7,6 @@
 
 // Export all primitives
 export * from './primitives';
+
+// Export all layout components
+export * from './layout';

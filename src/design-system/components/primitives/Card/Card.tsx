@@ -25,25 +25,25 @@ import { cn } from '@/design-system/utils/cn';
  * Inspired by Momentic.ai card design
  */
 const cardVariants = cva(
-  // Base styles
-  'rounded-2xl transition-all duration-200',
+  // Base styles - brutalist design
+  'rounded-brutalist-sm transition-all duration-200 border-2 border-zinc-900 bg-white',
   {
     variants: {
       variant: {
-        // Default - Dark surface with border
-        default: 'bg-dark-surface border border-dark-border',
+        // Default - White with border
+        default: 'bg-white border-zinc-900',
         
-        // Elevated - With shadow
-        elevated: 'bg-dark-surface border border-dark-border shadow-xl',
+        // Elevated - Same as default (no shadows in brutalism)
+        elevated: 'bg-white border-zinc-900',
         
         // Outlined - Border only
-        outlined: 'border-2 border-gray-700 bg-transparent',
+        outlined: 'border-zinc-900 bg-transparent',
         
-        // Gradient - Subtle gradient background
-        gradient: 'bg-gradient-to-br from-dark-surface to-gray-900 border border-dark-border',
+        // Gradient - Not used in brutalism, fallback to default
+        gradient: 'bg-white border-zinc-900',
         
-        // Glass - Glassmorphism effect
-        glass: 'bg-dark-bg/80 backdrop-blur-lg border border-dark-border',
+        // Glass - Not used in brutalism, fallback to default
+        glass: 'bg-white border-zinc-900',
       },
       
       padding: {
@@ -125,7 +125,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {...props}
       >
         {header && (
-          <div className="mb-4 pb-4 border-b border-dark-border">
+          <div className="mb-4 pb-4 border-b-2 border-zinc-900">
             {header}
           </div>
         )}
@@ -133,7 +133,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         <div>{children}</div>
         
         {footer && (
-          <div className="mt-4 pt-4 border-t border-dark-border">
+          <div className="mt-4 pt-4 border-t-2 border-zinc-900">
             {footer}
           </div>
         )}
@@ -153,7 +153,7 @@ export const CardHeader = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('mb-4 pb-4 border-b border-dark-border', className)}
+    className={cn('mb-4 pb-4 border-b-2 border-zinc-900', className)}
     {...props}
   />
 ));
@@ -181,7 +181,7 @@ export const CardFooter = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('mt-4 pt-4 border-t border-dark-border', className)}
+    className={cn('mt-4 pt-4 border-t-2 border-zinc-900', className)}
     {...props}
   />
 ));
@@ -197,7 +197,7 @@ export const CardTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn('text-xl font-semibold text-white', className)}
+    className={cn('text-xl font-bold text-zinc-900', className)}
     {...props}
   />
 ));
@@ -213,7 +213,7 @@ export const CardDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-gray-400 text-sm', className)}
+    className={cn('text-zinc-600 text-sm', className)}
     {...props}
   />
 ));

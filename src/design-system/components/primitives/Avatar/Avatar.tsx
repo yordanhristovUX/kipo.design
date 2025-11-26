@@ -21,8 +21,8 @@ import { cn } from '@/design-system/utils/cn';
  * Avatar variant styles using CVA
  */
 const avatarVariants = cva(
-  // Base styles
-  'inline-flex items-center justify-center overflow-hidden bg-gray-700 text-white font-medium',
+  // Base styles - brutalist design
+  'inline-flex items-center justify-center overflow-hidden bg-zinc-100 text-zinc-900 font-bold border-2 border-zinc-900',
   {
     variants: {
       size: {
@@ -33,8 +33,8 @@ const avatarVariants = cva(
         '2xl': 'w-20 h-20 text-xl',
       },
       shape: {
-        circle: 'rounded-full',
-        square: 'rounded-lg',
+        circle: 'rounded-brutalist',
+        square: 'rounded-brutalist',
       },
     },
     defaultVariants: {

@@ -106,8 +106,15 @@
     @apply text-xs font-bold uppercase tracking-wider text-zinc-500;
   }
 
-  /* Grid layout */
+  /* Grid layout - standard gap without black background */
   .brutalist-grid {
+    @apply grid gap-6;
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  /* Grid layout with 1px dividers - use for stats/data grids 
+     Note: Children should have bg-white and NO borders to avoid doubling */
+  .brutalist-grid-divided {
     @apply grid gap-px bg-zinc-900; /* 1px gaps via background */
   }
 

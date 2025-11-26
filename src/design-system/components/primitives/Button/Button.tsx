@@ -29,7 +29,7 @@ import { cn } from '@/design-system/utils/cn';
  */
 const buttonVariants = cva(
   // Base styles - brutalist aesthetic
-  'inline-flex items-center justify-center font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 rounded-brutalist',
+  'inline-flex items-center justify-center font-bold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 rounded-brutalist uppercase tracking-wide',
   {
     variants: {
       variant: {

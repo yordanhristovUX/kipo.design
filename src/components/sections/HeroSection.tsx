@@ -77,7 +77,7 @@ const HeroSection: React.FC = () => {
             <div className="flex justify-center mb-24">
               <EditableButton
                 variant="primary"
-                size="lg"
+                size="xl"
                 href={content.primaryButton?.href}
                 icon={ArrowRight}
                 editableId="hero-primary-button"
@@ -89,7 +89,7 @@ const HeroSection: React.FC = () => {
 
             {/* Stats - Brutalist Grid */}
             <div className="mt-24 pt-12 border-t-2 border-zinc-900">
-              <div className="grid grid-cols-3 gap-px bg-zinc-900">
+              <div className="brutalist-grid-divided grid-cols-3">
                 {content.stats?.map((stat: any, index: number) => (
                   <div key={index} className="bg-white p-8 text-center">
                     <EditableText

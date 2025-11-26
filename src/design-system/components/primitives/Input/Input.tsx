@@ -26,8 +26,8 @@ import { cn } from '@/design-system/utils/cn';
  * Input variant styles using CVA
  */
 const inputVariants = cva(
-  // Base styles
-  'w-full rounded-xl border bg-dark-surface text-white placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50',
+  // Base styles - brutalist design
+  'w-full rounded-brutalist border-2 bg-white text-zinc-900 placeholder:text-zinc-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 font-medium',
   {
     variants: {
       size: {
@@ -36,9 +36,9 @@ const inputVariants = cva(
         lg: 'h-13 px-5 text-lg',
       },
       state: {
-        default: 'border-dark-border hover:border-gray-600',
-        error: 'border-error focus:ring-error',
-        success: 'border-success focus:ring-success',
+        default: 'border-zinc-900 hover:border-primary',
+        error: 'border-red-600 focus:ring-red-600',
+        success: 'border-green-600 focus:ring-green-600',
       },
     },
     defaultVariants: {

@@ -32,3 +32,7 @@ export type { BadgeProps } from './Badge';
 // Avatar
 export { Avatar, AvatarGroup } from './Avatar';
 export type { AvatarProps, AvatarGroupProps } from './Avatar';
+
+// Typography
+export { Heading, Text } from './Typography';
+export type { HeadingProps, TextProps } from './Typography';

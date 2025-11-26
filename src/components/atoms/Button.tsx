@@ -57,14 +57,15 @@ const Button: React.FC<ButtonProps> = ({
       <a 
         href={href} 
         className={cn(
-          'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg',
-          variant === 'primary' && 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-lg hover:shadow-glow',
-          variant === 'secondary' && 'border-2 border-gray-700 text-gray-100 hover:bg-gray-800 hover:border-gray-600 bg-transparent',
-          variant === 'ghost' && 'text-gray-300 hover:bg-gray-800 hover:text-white bg-transparent',
-          size === 'sm' && 'h-9 px-3 text-sm rounded-lg gap-1.5',
-          size === 'md' && 'h-11 px-5 text-base rounded-xl gap-2',
-          size === 'lg' && 'h-13 px-7 text-lg rounded-xl gap-2',
-          size === 'xl' && 'h-16 px-10 text-xl rounded-2xl gap-3',
+          'inline-flex items-center justify-center font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-2 rounded-brutalist',
+          variant === 'primary' && 'bg-primary text-white border-primary hover:bg-primary-hover hover:border-primary-hover',
+          variant === 'secondary' && 'border-zinc-900 text-zinc-900 bg-white hover:bg-zinc-900 hover:text-white',
+          variant === 'ghost' && 'border-transparent text-zinc-900 hover:bg-zinc-100',
+          variant === 'outline' && 'border-zinc-300 text-zinc-900 bg-white hover:border-zinc-900',
+          size === 'sm' && 'h-9 px-4 text-sm gap-2',
+          size === 'md' && 'h-11 px-6 text-base gap-2',
+          size === 'lg' && 'h-13 px-8 text-lg gap-3',
+          size === 'xl' && 'h-16 px-10 text-xl gap-3',
           editClasses,
           selectedClasses,
           className
