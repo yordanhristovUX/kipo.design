@@ -1,12 +1,27 @@
 # kipo.design
 
-Modern portfolio website with a brutalist design system refined with utilitarian principles. Built with React, TypeScript, Tailwind CSS, and a custom CMS.
+Modern portfolio website with a brutalist design system refined with utilitarian principles. Built with React, TypeScript, Tailwind CSS, and a custom CMS with JSON backend.
+
+## ✨ Features
+
+- 🎨 Brutalist design system with utilitarian refinements
+- ✏️ Inline content editing
+- 📁 Project management with CRUD operations
+- 🖼️ Image upload and management
+- 💾 Server-side persistence (JSON files)
+- 🔄 Multi-user support
+- 📱 Fully responsive
+
+## 🚀 Quick Start
+
+See [QUICK-START.md](QUICK-START.md) for 5-minute setup.
 
 ## 📋 Table of Contents
 
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Development](#development)
+- [CMS Backend](#cms-backend)
 - [Design System](#design-system)
 - [Build & Deployment](#build--deployment)
 - [Git Workflow](#git-workflow)
@@ -47,7 +62,15 @@ cd kipo.design
 npm install
 ```
 
-### 3. Set up environment variables
+### 3. Install backend dependencies
+
+```bash
+cd backend
+npm install
+cd ..
+```
+
+### 4. Set up environment variables
 
 ```bash
 # Copy example file
@@ -61,16 +84,26 @@ nano .env  # or use your favorite editor
 
 ## 🚀 Development
 
-### Starting development server
+### Starting servers
 
+**Backend** (in one terminal):
+```bash
+cd backend
+npm start
+```
+
+Backend runs on `http://localhost:3001`
+
+**Frontend** (in another terminal):
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
+Frontend runs on `http://localhost:5173`
 
 ### Available commands
 
+**Frontend**:
 ```bash
 # Development server with hot reload
 npm run dev
@@ -87,6 +120,43 @@ npm run lint
 # TypeScript type checking
 npx tsc --noEmit
 ```
+
+**Backend**:
+```bash
+# Start server
+npm start
+
+# Development with auto-reload
+npm run dev
+```
+
+---
+
+## 💾 CMS Backend
+
+The CMS uses a JSON file backend for data persistence.
+
+### Features
+- RESTful API with Express
+- JSON file storage for sections and projects
+- Image upload with file storage
+- CORS enabled for frontend
+- Multi-user support
+
+### API Endpoints
+- `GET /api/health` - Health check
+- `GET /api/sections` - Get all sections
+- `POST /api/sections` - Save sections
+- `GET /api/projects` - Get all projects
+- `POST /api/projects` - Create project
+- `PATCH /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project
+- `POST /api/upload` - Upload image
+
+### Documentation
+- **[backend/README.md](backend/README.md)** - Backend API documentation
+- **[DEPLOYMENT-GUIDE.md](DEPLOYMENT-GUIDE.md)** - Deployment instructions
+- **[JSON-BACKEND-COMPLETE.md](JSON-BACKEND-COMPLETE.md)** - Implementation details
 
 ---
 
@@ -114,9 +184,8 @@ This project uses a **brutalist design system** refined with **utilitarian princ
 - Layout (Container, Section)
 
 ### Documentation
-- **[docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md)** - Complete design system guide
-- **[BRUTALIST-UTILITARIAN-UPDATE.md](BRUTALIST-UTILITARIAN-UPDATE.md)** - Latest refinements (v1.1)
-- **[BORDER_RADIUS_GUIDE.md](BORDER_RADIUS_GUIDE.md)** - Two-tier radius system
+- **[KIPO-DESIGN-SYSTEM.md](KIPO-DESIGN-SYSTEM.md)** - Complete design system guide (v1.1)
+- **[CHANGELOG-v1.1.md](CHANGELOG-v1.1.md)** - Latest refinements and changes
 - **Design System Showcase** - Available at `/design-system` route
 
 ### Quick Example
@@ -205,30 +274,22 @@ git merge dev
 
 1. **README.md** (this file) - Project overview and quick start
 2. **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and structure
-3. **[docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md)** - Design tokens and components
+3. **[KIPO-DESIGN-SYSTEM.md](KIPO-DESIGN-SYSTEM.md)** - Design system guide
 4. **[docs/DEVELOPMENT-STANDARDS.md](docs/DEVELOPMENT-STANDARDS.md)** - Coding standards
 5. **[docs/AI-GUIDELINES.md](docs/AI-GUIDELINES.md)** - AI development patterns
 
-### Design System Documentation
+### Core Documentation
 
 - **[KIPO-DESIGN-SYSTEM.md](KIPO-DESIGN-SYSTEM.md)** - Complete design system guide (v1.1)
-- **[docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md)** - Original design docs (reference)
-
-### Development Guides
-
 - **[docs/WORKFLOW.md](docs/WORKFLOW.md)** - Git workflow and processes
 - **[docs/GIT-GUIDE.md](docs/GIT-GUIDE.md)** - Quick Git reference
 - **[docs/DEVELOPMENT-STANDARDS.md](docs/DEVELOPMENT-STANDARDS.md)** - Standards and patterns
-
-### AI Development
-
 - **[docs/AI-GUIDELINES.md](docs/AI-GUIDELINES.md)** - AI-specific development patterns
 - **[docs/AI-DEVELOPMENT-PLAN.md](docs/AI-DEVELOPMENT-PLAN.md)** - AI development strategy
 
-### Project Status
+### Version History
 
-- **[AI-DEVELOPMENT-COMPLETE.md](AI-DEVELOPMENT-COMPLETE.md)** - Completed milestones
-- **[SETUP-COMPLETE.md](SETUP-COMPLETE.md)** - Setup checklist
+- **[CHANGELOG-v1.1.md](CHANGELOG-v1.1.md)** - Design system v1.1 changes
 
 ---
 
