@@ -1,101 +1,140 @@
+/**
+ * @fileoverview Work — client-project gallery. Each card shows the real project
+ * image when present, otherwise a device/browser mockup shot. Driven by
+ * projectService with the Manage Projects editor.
+ * @module components/Projects
+ */
+
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { useCMS } from '../contexts/CMSContext';
 import EditableText from './atoms/EditableText';
 import SectionWrapper from './cms/SectionWrapper';
-import { ProjectCard, Modal } from '@/design-system';
-import { ProjectEditor } from './projects';
+import { Modal } from '@/design-system';
+import { ProjectEditor } from './projects/index';
 import { projectService } from '@/services';
 import { Project } from '@/types';
+import WorkShot, { type WorkShotVariant } from './sections/visuals/WorkShot';
 
-const Projects: React.FC = () => {
-  const { updateSection, isEditMode } = useCMS();
+interface ProjectsProps {
+  sectionId?: string;
+}
+
+const CYCLE: WorkShotVariant[] = ['dashboard', 'phone', 'storefront'];
+
+/** Pick a mockup style from the project's tags, falling back to a cycle. */
+function variantFor(project: Project, index: number): WorkShotVariant {
+  const tags = (project.tags || []).join(' ').toLowerCase();
+  if (/phone|mobile|ios|android|app/.test(tags)) return 'phone';
+  if (/commerce|shop|store|retail|storefront/.test(tags)) return 'storefront';
+  if (/dashboard|web app|data|saas|fintech/.test(tags)) return 'dashboard';
+  return CYCLE[index % CYCLE.length];
+}
+
+const Projects: React.FC<ProjectsProps> = ({ sectionId = 'projects' }) => {
+  const { sections, updateSection, isEditMode } = useCMS();
+  const section = sections.find(s => s.id === sectionId);
+  const content = section?.content ?? {};
   const [projects, setProjects] = useState<Project[]>([]);
   const [showEditor, setShowEditor] = useState(false);
 
-  // Load projects from service
   useEffect(() => {
     loadProjects();
   }, []);
 
   const loadProjects = async () => {
     try {
-      const allProjects = await projectService.getAll();
-      setProjects(allProjects);
+      setProjects(await projectService.getAll());
     } catch (error) {
       console.error('Error loading projects:', error);
     }
   };
 
   const updateContent = (field: string, value: string) => {
-    updateSection('projects', { [field]: value });
+    updateSection(sectionId, { [field]: value });
   };
 
   return (
-    <SectionWrapper sectionId="projects">
-      <section id="work" className="brutalist-section bg-bg-primary ">
+    <SectionWrapper sectionId={sectionId}>
+      <section id="work" className="brutalist-section bg-bg-primary border-t border-border-primary">
         <div className="brutalist-container">
-          <div className="mb-16">
-            <div className="flex items-center justify-between">
-              <div className="util-label mb-4">006-PROJECTS</div>
-              {isEditMode && (
-                <button
-                  onClick={() => setShowEditor(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary text-inverse rounded-interactive hover:bg-primary/90 transition-colors"
-                >
-                  <Settings className="w-4 h-4" />
-                  Manage Projects
-                </button>
-              )}
+          <div className="mb-11 flex items-end justify-between gap-4 flex-wrap">
+            <div className="max-w-[660px]">
+              <div className="util-label mb-3.5">Selected work</div>
+              <EditableText
+                elementId={`${sectionId}-headline`}
+                onUpdate={(value) => updateContent('headline', value)}
+                className="text-[clamp(1.8rem,3.5vw,2.5rem)] font-bold text-text-primary"
+                as="h2"
+              >
+                {(content.headline as string) || 'Systems put to work — apps & websites'}
+              </EditableText>
+              <EditableText
+                elementId={`${sectionId}-description`}
+                onUpdate={(value) => updateContent('description', value)}
+                className="mt-3 text-text-secondary"
+                as="p"
+                multiline
+              >
+                {(content.description as string) ||
+                  'A few recent client products, each built on a design system your team can grow.'}
+              </EditableText>
             </div>
-            <EditableText
-              elementId="projects-headline"
-              onUpdate={(value) => updateContent('headline', value)}
-              className="text-4xl md:text-5xl font-bold text-text-primary mb-6"
-              as="h2"
-            >
-              Featured Projects
-            </EditableText>
-            <EditableText
-              elementId="projects-description"
-              onUpdate={(value) => updateContent('description', value)}
-              className="text-lg text-text-secondary max-w-2xl"
-              as="p"
-              multiline
-            >
-              Explore our latest work and see how we've helped businesses
-              transform their digital presence.
-            </EditableText>
+            {isEditMode && (
+              <button
+                onClick={() => setShowEditor(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-interactive hover:bg-primary-hover transition-colors text-sm font-semibold"
+              >
+                <Settings className="w-4 h-4 shrink-0" />
+                Manage Projects
+              </button>
+            )}
           </div>
 
-          {/* Full-width contained grid - matches Services section */}
           {projects.length > 0 ? (
-            <>
-              <div className="border-l border-r border-border-primary">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px brutalist-hatch">
-                  {projects.map((project) => (
-                    <ProjectCard key={project.id} project={project} />
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-12">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 border border-border-primary text-text-primary px-6 py-3 font-bold hover:bg-primary hover:text-inverse transition-all duration-200 rounded-brutalist uppercase tracking-wide text-sm"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {projects.map((project, i) => (
+                <article
+                  key={project.id}
+                  className="bg-surface-elevated border border-border-primary rounded-section overflow-hidden transition-[box-shadow,border-color] duration-200 hover:shadow-ds hover:border-border-strong"
                 >
-                  View All Projects
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </>
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="h-[184px] w-full object-cover border-b border-border-primary"
+                    />
+                  ) : (
+                    <WorkShot variant={variantFor(project, i)} />
+                  )}
+                  <div className="p-[18px]">
+                    <div className="font-mono text-[10.5px] text-text-tertiary tracking-[0.04em]">
+                      {[project.year, project.client].filter(Boolean).join(' · ')}
+                    </div>
+                    <h3 className="text-[1.1rem] font-semibold mt-1.5 text-text-primary">{project.title}</h3>
+                    {project.tags && project.tags.length > 0 && (
+                      <div className="flex gap-1.5 flex-wrap mt-3">
+                        {project.tags.map((tag, ti) => (
+                          <span
+                            key={ti}
+                            className="font-mono text-[10px] text-text-tertiary border border-border-primary rounded-md px-2 py-0.5 bg-bg-secondary"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
           ) : (
             <div className="border border-border-primary rounded-section p-12 text-center">
               <p className="text-text-tertiary mb-4">No projects yet.</p>
               {isEditMode && (
                 <button
                   onClick={() => setShowEditor(true)}
-                  className="px-6 py-3 bg-primary text-inverse rounded-interactive hover:bg-primary/90 transition-colors"
+                  className="px-6 py-3 bg-primary text-white rounded-interactive hover:bg-primary-hover transition-colors font-semibold"
                 >
                   Add Your First Project
                 </button>
@@ -105,17 +144,8 @@ const Projects: React.FC = () => {
         </div>
       </section>
 
-      {/* Project Editor Modal */}
-      <Modal
-        isOpen={showEditor}
-        onClose={() => setShowEditor(false)}
-        title="Project Management"
-        size="xl"
-      >
-        <ProjectEditor
-          projects={projects}
-          onProjectsChange={loadProjects}
-        />
+      <Modal isOpen={showEditor} onClose={() => setShowEditor(false)} title="Project Management" size="xl">
+        <ProjectEditor projects={projects} onProjectsChange={loadProjects} />
       </Modal>
     </SectionWrapper>
   );

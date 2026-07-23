@@ -25,27 +25,25 @@ import { cn } from '@/design-system/utils/cn';
  * Inspired by Momentic.ai card design
  */
 const cardVariants = cva(
-  // Base styles - brutalist with utilitarian refinements
-  'rounded-section transition-all duration-200 border bg-bg-primary',
+  // Surface with hairline border + restrained soft elevation.
+  'rounded-section transition-[box-shadow,border-color] duration-200 border bg-surface-elevated',
   {
     variants: {
       variant: {
-        // Default - Paper with muted border
-        default: 'bg-bg-primary border-border-primary',
-        
-        // Elevated - Same as default (no shadows)
-        elevated: 'bg-bg-primary border-border-primary',
-        
-        // Outlined - Border only
+        // Default - surface with hairline
+        default: 'border-border-primary',
+
+        // Elevated - soft shadow
+        elevated: 'border-border-primary shadow-ds',
+
+        // Outlined - border only
         outlined: 'border-border-primary bg-transparent',
-        
-        // Gradient - Not used, fallback to default
-        gradient: 'bg-bg-primary border-border-primary',
-        
-        // Glass - Not used, fallback to default
-        glass: 'bg-bg-primary border-border-primary',
+
+        // Legacy aliases fall back to default
+        gradient: 'border-border-primary',
+        glass: 'border-border-primary',
       },
-      
+
       padding: {
         none: 'p-0',
         sm: 'p-4',
@@ -53,9 +51,9 @@ const cardVariants = cva(
         lg: 'p-8',
         xl: 'p-10',
       },
-      
+
       hover: {
-        true: 'hover:border-primary cursor-pointer',
+        true: 'hover:border-border-strong hover:shadow-ds cursor-pointer',
         false: '',
       },
     },

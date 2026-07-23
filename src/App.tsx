@@ -1,38 +1,41 @@
-import React from 'react';
+import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CMSProvider, useCMS } from './contexts/CMSContext';
 import EditingToolbar from './components/cms/EditingToolbar';
 import SectionManager from './components/cms/SectionManager';
 import Header from './components/Header';
-import HeroSection from './components/sections/HeroSection';
-import Services from './components/Services';
-import Process from './components/Process';
-import Studio from './components/Studio';
-import Approach from './components/Approach';
-import Projects from './components/Projects';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import AdminPanel from './components/admin/AdminPanel';
-import DesignSystemShowcase from './components/DesignSystemShowcase';
+import { sectionRegistry } from './components/sections/registry';
+
+// Route-level code splitting: keep the admin editor and the design-system
+// showcase out of the initial public bundle.
+const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
+const DesignSystemShowcase = lazy(() => import('./components/DesignSystemShowcase'));
+
+const RouteFallback = () => (
+  <div className="min-h-screen flex items-center justify-center text-text-tertiary">Loading…</div>
+);
 
 function HomePage() {
-  const { isEditMode } = useCMS();
-  
+  const { isEditMode, sections } = useCMS();
+
+  // Render every section in order, resolving its renderer from the catalog by
+  // `type`. Enable/disable visibility is handled inside each SectionWrapper so
+  // disabled sections remain toggleable in edit mode.
+  const ordered = [...sections].sort((a, b) => a.order - b.order);
+
   return (
     <div className={`min-h-screen ${isEditMode ? 'pt-[60px]' : ''}`}>
       <EditingToolbar />
       <SectionManager />
       <Header />
-      <HeroSection />
-      <Services />
-      <Process />
-      <Studio />
-      <Approach />
-      <Projects />
-      <Testimonials />
-      <Contact />
-      <Footer />
+      <main>
+        {ordered.map((section) => {
+          const entry = sectionRegistry[section.type];
+          if (!entry) return null;
+          const Renderer = entry.Renderer;
+          return <Renderer key={section.id} sectionId={section.id} />;
+        })}
+      </main>
     </div>
   );
 }
@@ -41,11 +44,13 @@ function App() {
   return (
     <CMSProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/design-system" element={<DesignSystemShowcase />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/design-system" element={<DesignSystemShowcase />} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+        </Suspense>
       </Router>
     </CMSProvider>
   );

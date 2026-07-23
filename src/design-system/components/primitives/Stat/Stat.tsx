@@ -20,10 +20,10 @@ export const Stat: React.FC<StatProps> = ({
 }) => {
   return (
     <div className={`text-center ${className}`}>
-      <div className="text-3xl md:text-4xl font-bold font-mono text-text-primary mb-2">
+      <div className="text-3xl md:text-4xl font-bold font-mono text-text-primary mb-2 tabular-nums">
         {value}
       </div>
-      <div className="util-label">
+      <div className="mono text-xs uppercase tracking-wide text-text-tertiary">
         {label}
       </div>
     </div>

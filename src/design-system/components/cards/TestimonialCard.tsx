@@ -12,9 +12,11 @@ interface TestimonialCardProps {
     rating: number;
   };
   index: number;
+  /** Persist a field edit. When omitted the fields are read-only. */
+  onUpdate?: (field: 'quote' | 'author' | 'role' | 'company', value: string) => void;
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index }) => {
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index, onUpdate }) => {
   return (
     <div className="bg-bg-primary p-8 border-t border-border-primary">
       {/* Rating stars */}
@@ -27,7 +29,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index })
       {/* Quote */}
       <EditableText
         elementId={`testimonial-quote-${index}`}
-        onUpdate={(value) => console.log('Update quote:', value)}
+        onUpdate={(value) => onUpdate?.('quote', value)}
         className="text-text-secondary text-sm mb-6 leading-relaxed"
         as="blockquote"
         multiline
@@ -39,7 +41,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index })
       <div className="pt-4 border-t border-border-primary">
         <EditableText
           elementId={`testimonial-author-${index}`}
-          onUpdate={(value) => console.log('Update author:', value)}
+          onUpdate={(value) => onUpdate?.('author', value)}
           className="font-bold text-text-primary mb-1"
           as="div"
         >
@@ -48,7 +50,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index })
         <div className="text-text-tertiary text-xs">
           <EditableText
             elementId={`testimonial-role-${index}`}
-            onUpdate={(value) => console.log('Update role:', value)}
+            onUpdate={(value) => onUpdate?.('role', value)}
             as="span"
           >
             {testimonial.role}
@@ -56,7 +58,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, index })
           ,{' '}
           <EditableText
             elementId={`testimonial-company-${index}`}
-            onUpdate={(value) => console.log('Update company:', value)}
+            onUpdate={(value) => onUpdate?.('company', value)}
             as="span"
           >
             {testimonial.company}

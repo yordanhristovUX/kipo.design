@@ -27,7 +27,7 @@ import { cn } from '@/design-system/utils/cn';
  */
 const inputVariants = cva(
   // Base styles - brutalist with utilitarian refinements
-  'w-full rounded-interactive border bg-bg-primary placeholder:text-text-tertiary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 font-medium',
+  'w-full rounded-interactive border bg-surface-elevated placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       size: {
@@ -121,7 +121,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-gray-200 mb-2"
+            className="block text-sm font-medium text-text-primary mb-2"
           >
             {label}
           </label>
@@ -131,7 +131,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {/* Left icon */}
           {LeftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary">
               <LeftIcon className="w-5 h-5" />
             </div>
           )}
@@ -151,7 +151,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
           {/* Right icon */}
           {RightIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary">
               <RightIcon className="w-5 h-5" />
             </div>
           )}
@@ -195,7 +195,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         {/* Helper text */}
         {helperText && !error && !success && (
-          <p className="mt-2 text-sm text-gray-400">{helperText}</p>
+          <p className="mt-2 text-sm text-text-tertiary">{helperText}</p>
         )}
       </div>
     );

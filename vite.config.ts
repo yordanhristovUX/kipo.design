@@ -23,4 +23,16 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Split large, stable vendors into their own cacheable chunks so the
+        // app code chunk stays small.
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'lucide': ['lucide-react'],
+        },
+      },
+    },
+  },
 });

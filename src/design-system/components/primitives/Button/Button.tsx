@@ -28,29 +28,30 @@ import { cn } from '@/design-system/utils/cn';
  * Brutalist design system - geometric, bold, no shadows
  */
 const buttonVariants = cva(
-  // Base styles - brutalist with utilitarian refinements
-  'inline-flex items-center justify-center font-bold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border rounded-interactive uppercase tracking-wide',
+  // Flat, precise buttons — tight radius, hover = colour/border change only
+  // (no gloss, no translate bounce).
+  'inline-flex items-center justify-center font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:pointer-events-none disabled:opacity-50 border rounded-interactive',
   {
     variants: {
       variant: {
-        // Primary - Electric blue fill (utilitarian)
+        // Primary - solid accent
         primary: 'bg-primary text-white border-primary hover:bg-primary-hover hover:border-primary-hover',
-        
-        // Secondary - Muted border (utilitarian)
-        secondary: 'border-border-primary text-text-primary bg-bg-primary hover:bg-primary hover:text-white hover:border-primary',
-        
-        // Ghost - No border
+
+        // Secondary - quiet neutral, border/color shift on hover
+        secondary: 'border-border-strong text-text-primary bg-surface-elevated hover:bg-bg-secondary hover:border-text-tertiary',
+
+        // Ghost - no border
         ghost: 'border-transparent text-text-primary hover:bg-bg-secondary',
-        
-        // Outline - Muted border (utilitarian)
-        outline: 'border-border-primary text-text-primary bg-bg-primary hover:border-primary',
+
+        // Outline - neutral border, accent border on hover
+        outline: 'border-border-strong text-text-primary bg-transparent hover:border-primary hover:text-primary',
       },
-      
+
       size: {
         sm: 'h-9 px-4 text-sm gap-2',
-        md: 'h-11 px-6 text-base gap-2',
-        lg: 'h-14 px-8 text-lg gap-3',
-        xl: 'h-16 px-10 text-xl gap-3',
+        md: 'h-11 px-5 text-[15px] gap-2',
+        lg: 'h-12 px-6 text-base gap-2.5',
+        xl: 'h-14 px-8 text-lg gap-3',
       },
       
       fullWidth: {
@@ -135,7 +136,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? (
           <>
             <svg
-              className="animate-spin h-5 w-5"
+              className="animate-spin h-5 w-5 shrink-0"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -158,9 +159,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : (
           <>
-            {FinalLeftIcon && <FinalLeftIcon className="w-5 h-5" />}
+            {FinalLeftIcon && <FinalLeftIcon className="w-5 h-5 shrink-0" />}
             <span>{children}</span>
-            {FinalRightIcon && <FinalRightIcon className="w-5 h-5" />}
+            {FinalRightIcon && <FinalRightIcon className="w-5 h-5 shrink-0" />}
           </>
         )}
       </button>

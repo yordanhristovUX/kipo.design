@@ -21,8 +21,8 @@ import { cn } from '@/design-system/utils/cn';
  * Avatar variant styles using CVA
  */
 const avatarVariants = cva(
-  // Base styles - brutalist design
-  'inline-flex items-center justify-center overflow-hidden bg-zinc-100 text-zinc-900 font-bold border-2 border-zinc-900',
+  // Solid accent fill, mono initials (brand signature).
+  'inline-flex items-center justify-center overflow-hidden bg-primary text-white font-mono font-semibold',
   {
     variants: {
       size: {
@@ -33,7 +33,7 @@ const avatarVariants = cva(
         '2xl': 'w-20 h-20 text-xl',
       },
       shape: {
-        circle: 'rounded-brutalist',
+        circle: 'rounded-full',
         square: 'rounded-brutalist',
       },
     },
@@ -153,17 +153,17 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
             {...avatar}
             size={size}
             className={cn(
-              'ring-2 ring-dark-bg',
+              'ring-2 ring-bg-primary',
               avatar.className
             )}
           />
         ))}
-        
+
         {remaining > 0 && (
           <div
             className={cn(
               avatarVariants({ size, shape: 'circle' }),
-              'ring-2 ring-dark-bg bg-gray-600'
+              'ring-2 ring-bg-primary !bg-surface-3 !text-text-secondary'
             )}
           >
             <span className="text-xs">+{remaining}</span>

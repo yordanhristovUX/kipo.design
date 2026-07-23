@@ -61,6 +61,9 @@ export default {
           border: 'var(--color-info-border)',
         },
         
+        // Accent tints
+        'primary-soft': 'var(--color-primary-soft)',
+
         // Surface colors
         'surface': {
           DEFAULT: 'var(--color-surface-default)',
@@ -69,15 +72,21 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'monospace'],
+        sans: ['Hanken Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
       },
       borderRadius: {
-        // Two-tier system: 1px for sections, 6px for interactive
-        'brutalist-sm': '1px',  // Large sections
-        'brutalist': '6px',     // Interactive elements
-        'section': '1px',
-        'interactive': '6px',
+        // Tight, considered radii — 7px controls, 9px cards, 14px large panels.
+        'brutalist-sm': '7px',
+        'brutalist': '7px',
+        'section': 'var(--radius-section)',      // 9px
+        'interactive': 'var(--radius-interactive)', // 7px
+        'lg-panel': 'var(--radius-lg)',          // 14px
+      },
+      boxShadow: {
+        'ds-sm': 'var(--shadow-sm)',
+        'ds': 'var(--shadow)',
+        'ds-lg': 'var(--shadow-lg)',
       },
       borderWidth: {
         '1': '1px',

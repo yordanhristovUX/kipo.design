@@ -10,9 +10,11 @@ interface ApproachCardProps {
     stat: string;
   };
   index: number;
+  /** Persist a field edit. When omitted the fields are read-only. */
+  onUpdate?: (field: 'title' | 'description' | 'stat', value: string) => void;
 }
 
-const ApproachCard: React.FC<ApproachCardProps> = ({ principle, index }) => {
+const ApproachCard: React.FC<ApproachCardProps> = ({ principle, index, onUpdate }) => {
   // Get icon name for Isocon
   const getIconName = () => {
     if (typeof principle.icon === 'string') return principle.icon;
@@ -28,7 +30,7 @@ const ApproachCard: React.FC<ApproachCardProps> = ({ principle, index }) => {
 
       <EditableText
         elementId={`approach-title-${index}`}
-        onUpdate={(value) => console.log('Update title:', value)}
+        onUpdate={(value) => onUpdate?.('title', value)}
         className="text-xl font-bold text-text-primary mb-3"
         as="h3"
       >
@@ -37,7 +39,7 @@ const ApproachCard: React.FC<ApproachCardProps> = ({ principle, index }) => {
 
       <EditableText
         elementId={`approach-description-${index}`}
-        onUpdate={(value) => console.log('Update description:', value)}
+        onUpdate={(value) => onUpdate?.('description', value)}
         className="text-sm text-text-secondary mb-4 leading-relaxed"
         as="p"
         multiline
@@ -48,7 +50,7 @@ const ApproachCard: React.FC<ApproachCardProps> = ({ principle, index }) => {
       <div className="pt-4 border-t border-border-primary">
         <EditableText
           elementId={`approach-stat-${index}`}
-          onUpdate={(value) => console.log('Update stat:', value)}
+          onUpdate={(value) => onUpdate?.('stat', value)}
           className="text-xs font-bold text-text-tertiary uppercase tracking-wide"
           as="div"
         >

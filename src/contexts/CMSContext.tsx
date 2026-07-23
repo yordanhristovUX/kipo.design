@@ -1,14 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiService } from '../services/api.service';
-import type { SectionConfig, CMSContextType } from '../types/cms.types';
+import type { SectionConfig, SectionType, CMSContextType } from '../types/cms.types';
 
 export type { MediaItem, ButtonConfig, IconConfig, SectionConfig } from '../types/cms.types';
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
-const USE_API = import.meta.env.VITE_USE_API === 'true';
 
-const defaultSections: SectionConfig[] = [
+const defaultSectionsBase: Omit<SectionConfig, 'type'>[] = [
   {
     id: 'hero',
     name: 'Hero Section',
@@ -167,6 +166,20 @@ const defaultSections: SectionConfig[] = [
   }
 ];
 
+// For the default sections the block type equals the instance id.
+const defaultSections: SectionConfig[] = defaultSectionsBase.map(s => ({
+  ...s,
+  type: s.id as SectionType,
+}));
+
+/** Backfill a `type` for any section that predates the block-catalog schema. */
+function normalizeSections(sections: SectionConfig[]): SectionConfig[] {
+  return sections.map(s => ({
+    ...s,
+    type: (s.type ?? (s.id as SectionType)) as SectionType,
+  }));
+}
+
 export const CMSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isEditMode, setEditMode] = useState(false);
   const [showSectionManager, setShowSectionManager] = useState(false);
@@ -174,23 +187,17 @@ export const CMSProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [sections, setSections] = useState<SectionConfig[]>(defaultSections);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load sections from API or localStorage
+  // Load sections from the API. If it is unreachable or returns nothing, the
+  // public site still renders from `defaultSections` (graceful fallback).
   useEffect(() => {
     const loadSections = async () => {
       try {
-        if (USE_API) {
-          const apiSections = await apiService.getSections();
-          if (apiSections && apiSections.length > 0) {
-            setSections(apiSections);
-          }
-        } else {
-          const stored = localStorage.getItem('kipo_sections');
-          if (stored) {
-            setSections(JSON.parse(stored));
-          }
+        const apiSections = await apiService.getSections();
+        if (apiSections && apiSections.length > 0) {
+          setSections(normalizeSections(apiSections));
         }
       } catch (error) {
-        console.error('Error loading sections:', error);
+        console.error('Error loading sections (falling back to defaults):', error);
       } finally {
         setIsLoading(false);
       }
@@ -199,24 +206,21 @@ export const CMSProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     loadSections();
   }, []);
 
-  // Persist sections whenever they change
+  // Persist edits back to the API. Only runs while editing — public visitors
+  // never mutate sections, so this never fires an unauthenticated write.
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || !isEditMode) return;
 
     const saveSections = async () => {
       try {
-        if (USE_API) {
-          await apiService.saveSections(sections);
-        } else {
-          localStorage.setItem('kipo_sections', JSON.stringify(sections));
-        }
+        await apiService.saveSections(sections);
       } catch (error) {
         console.error('Error saving sections:', error);
       }
     };
 
     saveSections();
-  }, [sections, isLoading]);
+  }, [sections, isLoading, isEditMode]);
 
   const updateSection = (sectionId: string, content: Record<string, unknown>) => {
     setSections(prev => prev.map(section => 
@@ -255,6 +259,22 @@ export const CMSProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setSections(prev => prev.filter(section => section.id !== sectionId));
   };
 
+  const addSection = (
+    type: SectionType,
+    name: string,
+    defaultContent: Record<string, unknown>
+  ) => {
+    const newSection: SectionConfig = {
+      id: `${type}-${Date.now()}`,
+      type,
+      name,
+      enabled: true,
+      order: sections.length + 1,
+      content: defaultContent,
+    };
+    setSections(prev => [...prev, newSection]);
+  };
+
   return (
     <CMSContext.Provider value={{
       isEditMode,
@@ -267,6 +287,7 @@ export const CMSProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       duplicateSection,
       toggleSection,
       deleteSection,
+      addSection,
       selectedElement,
       setSelectedElement
     }}>

@@ -13,7 +13,7 @@ import { cn } from '@/design-system/utils/cn';
  * Heading variant styles
  */
 const headingVariants = cva(
-  'font-bold text-zinc-900',
+  'font-bold text-text-primary',
   {
     variants: {
       level: {
@@ -35,7 +35,7 @@ const headingVariants = cva(
  * Text variant styles
  */
 const textVariants = cva(
-  'text-zinc-600',
+  'text-text-secondary',
   {
     variants: {
       size: {

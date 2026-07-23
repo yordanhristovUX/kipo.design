@@ -21,24 +21,24 @@ import { cn } from '@/design-system/utils/cn';
  * Badge variant styles using CVA
  */
 const badgeVariants = cva(
-  // Base styles - brutalist with utilitarian refinements
-  'inline-flex items-center justify-center font-bold transition-colors border uppercase tracking-wide',
+  // Mono utility chips, tinted single-hue (no solid-fill shouting).
+  'inline-flex items-center justify-center font-mono font-medium tracking-wide transition-colors border',
   {
     variants: {
       variant: {
-        default: 'bg-bg-secondary text-text-primary border-border-primary',
-        primary: 'bg-primary text-white border-primary',
-        secondary: 'bg-bg-primary text-text-primary border-border-primary',
-        success: 'bg-green-500 text-white border-green-600',
-        error: 'bg-red-500 text-white border-red-600',
-        warning: 'bg-yellow-500 text-text-primary border-yellow-600',
-        info: 'bg-blue-500 text-white border-blue-600',
-        outline: 'border-border-primary text-text-primary bg-transparent',
+        default: 'bg-bg-secondary text-text-secondary border-border-primary',
+        primary: 'bg-primary-soft text-primary border-transparent',
+        secondary: 'bg-surface-elevated text-text-secondary border-border-primary',
+        success: 'text-success border-success-border bg-success-bg',
+        error: 'text-error border-error-border bg-error-bg',
+        warning: 'text-warning border-warning-border bg-warning-bg',
+        info: 'bg-primary-soft text-primary border-transparent',
+        outline: 'border-border-strong text-text-secondary bg-transparent',
       },
       size: {
-        sm: 'px-2 py-0.5 text-xs rounded-interactive',
-        md: 'px-2.5 py-1 text-sm rounded-interactive',
-        lg: 'px-3 py-1.5 text-base rounded-interactive',
+        sm: 'px-2 py-0.5 text-[11px] rounded-interactive',
+        md: 'px-2.5 py-0.5 text-xs rounded-interactive',
+        lg: 'px-3 py-1 text-sm rounded-interactive',
       },
     },
     defaultVariants: {

@@ -25,6 +25,15 @@ const EditableText: React.FC<EditableTextProps> = ({
   
   const isSelected = selectedElement === elementId;
 
+  // Keep local draft in sync when the underlying content changes externally
+  // (e.g. after a save or a different section loads). Without this the editor
+  // would reopen showing a stale value captured at mount.
+  useEffect(() => {
+    if (!isEditing) {
+      setContent(children?.toString() || '');
+    }
+  }, [children, isEditing]);
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();

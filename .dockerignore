@@ -1,0 +1,11 @@
+node_modules
+backend/node_modules
+dist
+backend/data
+backend/uploads
+backend/.env
+.env
+.git
+.vscode
+documentation-archive
+**/*.log

@@ -5,7 +5,11 @@ import EditableText from './atoms/EditableText';
 import SectionWrapper from './cms/SectionWrapper';
 import { Input, Button, Card, CardContent, ContactInfo } from '@/design-system';
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  sectionId?: string;
+}
+
+const Contact: React.FC<ContactProps> = ({ sectionId = 'contact' }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,7 +21,7 @@ const Contact: React.FC = () => {
   const { updateSection } = useCMS();
 
   const updateContent = (field: string, value: string) => {
-    updateSection('contact', { [field]: value });
+    updateSection(sectionId, { [field]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,7 +45,7 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <SectionWrapper sectionId="contact">
+    <SectionWrapper sectionId={sectionId}>
       <section id="contact" className="brutalist-section bg-bg-primary">
         <div className="brutalist-container">
           <div className="mb-12 text-center">
@@ -163,9 +167,9 @@ const Contact: React.FC = () => {
                       variant="primary"
                       size="lg"
                       className="w-full"
+                      rightIcon={Send}
                     >
                       Send Message
-                      <Send className="w-5 h-5 ml-2" />
                     </Button>
                   </form>
                 </CardContent>
@@ -198,12 +202,12 @@ const Contact: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-text-primary border-text-primary diagonal-stripes overflow-hidden">
+              <Card className="bg-primary border-primary overflow-hidden">
                 <CardContent className="p-8">
                   <EditableText
                     elementId="contact-cta-title"
                     onUpdate={(value) => updateContent('ctaTitle', value)}
-                    className="text-xl font-bold mb-4 text-bg-primary"
+                    className="text-xl font-bold mb-4 text-white"
                     as="h3"
                   >
                     Free Consultation
@@ -211,18 +215,18 @@ const Contact: React.FC = () => {
                   <EditableText
                     elementId="contact-cta-description"
                     onUpdate={(value) => updateContent('ctaDescription', value)}
-                    className="text-zinc-300 mb-6 text-sm"
+                    className="text-white/85 mb-6 text-sm"
                     as="p"
                     multiline
                   >
                     Schedule a 30-minute call to discuss your project and explore how we can help.
                   </EditableText>
-                  <Button 
-                    variant="secondary" 
+                  <Button
+                    variant="secondary"
                     size="lg"
-                    className="w-full bg-bg-primary text-text-primary hover:bg-bg-secondary border-bg-primary"
+                    className="w-full bg-white text-primary hover:bg-white/90 border-white"
+                    leftIcon={Calendar}
                   >
-                    <Calendar className="w-5 h-5 mr-2" />
                     Book a Call
                   </Button>
                 </CardContent>

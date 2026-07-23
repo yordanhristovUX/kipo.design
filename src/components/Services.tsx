@@ -1,102 +1,125 @@
+/**
+ * @fileoverview Capabilities — a bento grid of services with spot illustrations.
+ * Content-driven (section.content.services) and inline-editable.
+ * @module components/Services
+ */
+
 import React from 'react';
+import * as LucideIcons from 'lucide-react';
 import { useCMS } from '../contexts/CMSContext';
 import EditableText from './atoms/EditableText';
 import SectionWrapper from './cms/SectionWrapper';
-import { ServiceCard } from '@/design-system';
+import { ChipIcon, LayersIllo, TokensIllo, MiniAreaChart } from './sections/visuals/CapabilityVisuals';
 
-const defaultServices = [
-  {
-    icon: { name: 'Palette' },
-    title: 'UX/UI Design',
-    description: 'User-centered design that combines beautiful aesthetics with intuitive functionality.',
-    features: ['User Research', 'Wireframing', 'Prototyping', 'Visual Design'],
-    color: 'bg-blue-50 text-blue-600'
-  },
-  {
-    icon: { name: 'Code' },
-    title: 'Web Design & Development',
-    description: 'Modern, responsive websites built with the latest technologies and best practices.',
-    features: ['Responsive Design', 'Performance Optimization', 'SEO Integration', 'CMS Development'],
-    color: 'bg-green-50 text-green-600'
-  },
-  {
-    icon: { name: 'Layers' },
-    title: 'Design Systems',
-    description: 'Scalable design systems that maintain consistency across all your digital products.',
-    features: ['Component Libraries', 'Style Guides', 'Documentation', 'Token Management'],
-    color: 'bg-purple-50 text-purple-600'
-  },
-  {
-    icon: { name: 'Smartphone' },
-    title: 'Product Design',
-    description: 'End-to-end product design from concept to launch, focused on user needs and business goals.',
-    features: ['Product Strategy', 'User Testing', 'Conversion Optimization', 'Launch Support'],
-    color: 'bg-orange-50 text-orange-600'
-  }
+interface ServiceItem {
+  icon?: { name?: string };
+  title: string;
+  description: string;
+  features?: string[];
+}
+
+interface ServicesProps {
+  sectionId?: string;
+}
+
+const defaultServices: ServiceItem[] = [
+  { icon: { name: 'Boxes' }, title: 'Design Systems', description: 'Component libraries, tokens and documentation that keep every screen consistent as you scale.' },
+  { icon: { name: 'Code2' }, title: 'Design-led Development', description: 'Design and engineering in one loop. Decisions land as tokens and components — not handoff PDFs.' },
+  { icon: { name: 'PenTool' }, title: 'UX/UI Design', description: 'Research-backed interface design, prototyped and tested.' },
+  { icon: { name: 'LayoutDashboard' }, title: 'Web & App Development', description: 'Modern, responsive products built with maintainable code.' },
 ];
 
-const Services: React.FC = () => {
+const resolveIcon = (name?: string): React.ComponentType<{ className?: string }> =>
+  (name && (LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[name]) || LucideIcons.Boxes;
+
+// Column spans per cell (mobile is full width); repeats after the first four.
+const spanFor = (i: number): string => {
+  const pattern = ['md:col-span-3', 'md:col-span-3', 'md:col-span-2', 'md:col-span-4'];
+  return pattern[i] || 'md:col-span-3';
+};
+const IlloFor = (i: number): React.FC | null =>
+  i === 0 ? LayersIllo : i === 1 ? TokensIllo : i === 3 ? MiniAreaChart : null;
+
+const Services: React.FC<ServicesProps> = ({ sectionId = 'services' }) => {
   const { sections, updateSection } = useCMS();
-  const section = sections.find(s => s.id === 'services');
-  
+  const section = sections.find(s => s.id === sectionId);
+
   if (!section) return null;
 
   const { content } = section;
+  const rawServices = content.services as ServiceItem[] | undefined;
+  const services = Array.isArray(rawServices) && rawServices.length > 0 ? rawServices : defaultServices;
 
-  const updateContent = (field: string, value: string) => {
-    updateSection('services', { [field]: value });
+  const updateContent = (field: string, value: unknown) => {
+    updateSection(sectionId, { [field]: value });
   };
 
-  const handleServiceUpdate = (index: number, field: string, value: string) => {
-    const services = (content.services as typeof defaultServices) || defaultServices;
-    const newServices = [...services];
-    newServices[index] = {
-      ...newServices[index],
-      [field]: value
-    };
-    updateContent('services', JSON.stringify(newServices));
+  const updateService = (index: number, field: keyof ServiceItem, value: string) => {
+    const next = services.map((s, i) => (i === index ? { ...s, [field]: value } : s));
+    updateContent('services', next);
   };
-
-  const services = (content.services as typeof defaultServices) || defaultServices;
 
   return (
-    <SectionWrapper sectionId="services">
-      <section id="services" className="brutalist-section bg-bg-primary">
+    <SectionWrapper sectionId={sectionId}>
+      <section id="services" className="brutalist-section bg-bg-primary border-t border-border-primary">
         <div className="brutalist-container">
-          <div className="mb-16">
-            <div className="util-label mb-4">002-SERVICES</div>
+          <div className="mb-11 max-w-[660px]">
+            <div className="util-label mb-3.5">What we do</div>
             <EditableText
-              elementId="services-headline"
+              elementId={`${sectionId}-headline`}
               onUpdate={(value) => updateContent('headline', value)}
-              className="text-4xl md:text-5xl font-bold text-text-primary mb-6"
+              className="text-[clamp(1.8rem,3.5vw,2.5rem)] font-bold text-text-primary"
               as="h2"
             >
-              {content.headline || 'What We Do'}
+              {(content.headline as string) || 'Design systems, and the products they power'}
             </EditableText>
-
             <EditableText
-              elementId="services-description"
+              elementId={`${sectionId}-description`}
               onUpdate={(value) => updateContent('description', value)}
-              className="text-lg text-text-secondary max-w-2xl"
+              className="mt-3 text-text-secondary"
               as="p"
               multiline
             >
-              {content.description || 'We specialize in creating digital experiences that not only look great but drive real business results.'}
+              {(content.description as string) ||
+                'We specialize in the systems layer — tokens, components, documentation — then lead the design-led development that turns it into shipped products.'}
             </EditableText>
           </div>
 
-          {/* Full-width contained grid */}
-          <div className="border-l border-r border-border-primary">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px brutalist-hatch">
-              {services.map((service, index) => (
-                <ServiceCard
-                  key={index}
-                  service={service}
-                  index={index}
-                  onUpdate={handleServiceUpdate}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-3 auto-rows-[minmax(148px,auto)]">
+            {services.map((service, i) => {
+              const Illo = IlloFor(i);
+              return (
+                <div
+                  key={i}
+                  className={`${spanFor(i)} relative overflow-hidden bg-surface-elevated border border-border-primary rounded-section p-[22px] transition-[box-shadow,border-color] duration-200 hover:shadow-ds hover:border-border-strong`}
+                >
+                  <div className="font-mono text-[11px] tracking-[0.05em] text-primary">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <div className="flex items-center gap-2.5 mt-1.5">
+                    <ChipIcon icon={resolveIcon(service.icon?.name)} />
+                    <EditableText
+                      elementId={`${sectionId}-service-${i}-title`}
+                      onUpdate={(value) => updateService(i, 'title', value)}
+                      className="text-[1.14rem] font-semibold text-text-primary"
+                      as="h3"
+                    >
+                      {service.title}
+                    </EditableText>
+                  </div>
+                  <EditableText
+                    elementId={`${sectionId}-service-${i}-desc`}
+                    onUpdate={(value) => updateService(i, 'description', value)}
+                    className="mt-2 text-[13.5px] text-text-secondary max-w-[36ch]"
+                    as="p"
+                    multiline
+                  >
+                    {service.description}
+                  </EditableText>
+                  {Illo && <Illo />}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -1,19 +1,10 @@
 /**
- * @fileoverview Project CRUD service
+ * @fileoverview Project CRUD service — thin wrapper over the REST apiService.
  * @module services/project
  */
 
 import { Project, CreateProjectDto, UpdateProjectDto } from '../types/project.types';
 import { apiService } from './api.service';
-
-const USE_API = import.meta.env.VITE_USE_API === 'true';
-
-/**
- * Generate unique ID
- */
-function generateId(): string {
-  return `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
 
 /**
  * Generate URL-friendly slug from title
@@ -41,12 +32,7 @@ export class ProjectService {
    * Get all projects
    */
   async getAll(): Promise<Project[]> {
-    if (USE_API) {
-      return await apiService.getProjects();
-    }
-    // Fallback to localStorage for development
-    const stored = localStorage.getItem('kipo_projects');
-    return stored ? JSON.parse(stored) : [];
+    return apiService.getProjects();
   }
 
   /**
@@ -69,73 +55,24 @@ export class ProjectService {
    * Create new project
    */
   async create(data: CreateProjectDto): Promise<Project> {
-    if (USE_API) {
-      return await apiService.createProject({
-        ...data,
-        slug: data.slug || generateSlug(data.title)
-      });
-    }
-    
-    // Fallback to localStorage
-    const projects = await this.getAll();
-    const newProject: Project = {
+    return apiService.createProject({
       ...data,
-      id: generateId(),
       slug: data.slug || generateSlug(data.title),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    projects.push(newProject);
-    localStorage.setItem('kipo_projects', JSON.stringify(projects));
-
-    return newProject;
+    });
   }
 
   /**
    * Update existing project
    */
   async update(id: string, updates: Partial<UpdateProjectDto>): Promise<Project | null> {
-    if (USE_API) {
-      return await apiService.updateProject(id, updates);
-    }
-    
-    // Fallback to localStorage
-    const projects = await this.getAll();
-    const index = projects.findIndex(p => p.id === id);
-
-    if (index === -1) {
-      return null;
-    }
-
-    projects[index] = {
-      ...projects[index],
-      ...updates,
-      updatedAt: new Date().toISOString()
-    };
-
-    localStorage.setItem('kipo_projects', JSON.stringify(projects));
-    return projects[index];
+    return apiService.updateProject(id, updates);
   }
 
   /**
    * Delete project
    */
   async delete(id: string): Promise<boolean> {
-    if (USE_API) {
-      await apiService.deleteProject(id);
-      return true;
-    }
-    
-    // Fallback to localStorage
-    const projects = await this.getAll();
-    const filtered = projects.filter(p => p.id !== id);
-
-    if (filtered.length === projects.length) {
-      return false;
-    }
-
-    localStorage.setItem('kipo_projects', JSON.stringify(projects));
+    await apiService.deleteProject(id);
     return true;
   }
 
@@ -145,22 +82,6 @@ export class ProjectService {
   async isSlugUnique(slug: string, excludeId?: string): Promise<boolean> {
     const projects = await this.getAll();
     return !projects.some(p => p.slug === slug && p.id !== excludeId);
-  }
-
-  /**
-   * Reorder projects
-   */
-  async reorder(projectIds: string[]): Promise<void> {
-    const projects = await this.getAll();
-    const reordered = projectIds
-      .map(id => projects.find(p => p.id === id))
-      .filter((p): p is Project => p !== undefined);
-
-    if (USE_API) {
-      await apiService.saveSections(reordered as any); // TODO: Add reorder endpoint
-    } else {
-      localStorage.setItem('kipo_projects', JSON.stringify(reordered));
-    }
   }
 }
 
